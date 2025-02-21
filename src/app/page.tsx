@@ -1,84 +1,101 @@
 'use client'
+import { useState, useRef } from 'react'
 import { Button } from '@/components/ui/button'
-import { useState } from 'react'
 
-type Level = {
+interface Level {
   id: number
   duration: number
-  bb: number
   sb: number
+  bb: number
 }
 
-export function Level({ level }) {
-  const [duration, setDuration] = useState(0)
-  const [sb, setSb] = useState(0)
-  const [bb, setBb] = useState(0)
+function Level({
+  level,
+  onUpdate,
+  onDelete,
+}: {
+  level: Level
+  onUpdate: (updatedLevel: Level) => void
+  onDelete: () => void
+}) {
+  function handleInputChange(key: keyof Level, value: number) {
+    onUpdate({ ...level, [key]: value })
+  }
 
   return (
-    <div>
+    <div className="flex items-center gap-2">
       <div>{level.id}</div>
       <input
         type="number"
-        onChange={(e) => setDuration(e.target.value)}
-        value={duration}
+        value={level.duration}
+        onChange={(e) => handleInputChange('duration', Number(e.target.value))}
       />
       <input
         type="number"
-        onChange={(e) => setDuration(e.target.value)}
-        value={sb}
+        value={level.sb}
+        onChange={(e) => handleInputChange('sb', Number(e.target.value))}
       />
       <input
         type="number"
-        onChange={(e) => setDuration(e.target.value)}
-        value={bb}
+        value={level.bb}
+        onChange={(e) => handleInputChange('bb', Number(e.target.value))}
       />
+      <Button onClick={onDelete}>Delete</Button>
     </div>
   )
 }
 
 export default function TimerSettings() {
   const [levels, setLevels] = useState<Level[]>([])
-  let nextId = 0
 
   function handleAddLevel(duration: number, bb: number) {
-    setLevels([
-      ...levels,
+    setLevels((prevLevels) => [
+      ...prevLevels,
       {
-        id: nextId++,
-        duration: duration,
-        bb: bb,
+        id: prevLevels.length + 1,
+        duration,
+        bb,
         sb: bb / 2,
       },
     ])
   }
 
-  function handleChangeLevel(level: Level) {
-    setLevels(
-      levels.map((t) => {
-        if (t.id === level.id) {
-          return level
-        } else {
-          return t
-        }
-      })
+  function handleUpdateLevel(updatedLevel: Level) {
+    setLevels((prevLevels) =>
+      prevLevels.map((level) =>
+        level.id === updatedLevel.id ? updatedLevel : level
+      )
     )
   }
 
   function handleDeleteLevel(levelId: number) {
-    setLevels(levels.filter((l) => l.id !== levelId))
+    setLevels((prevLevels) => {
+      const updatedLevels = prevLevels.filter((l) => l.id !== levelId)
+
+      return updatedLevels.map((level, index) => ({
+        ...level,
+        id: index + 1,
+      }))
+    })
   }
+
   return (
     <div>
-      <div className="grid grid-cols-4 grid-rows-3 gap-4">
+      <div className="grid grid-cols-4 gap-4 font-bold">
         <div>Round</div>
         <div>Duration (min)</div>
         <div>Small Blind</div>
         <div>Big Blind</div>
       </div>
-      {levels.map((level, index) => (
-        <Level key={index} level={level} />
+      {levels.map((level) => (
+        <Level
+          key={level.id}
+          level={level}
+          onUpdate={handleUpdateLevel}
+          onDelete={() => handleDeleteLevel(level.id)}
+        />
       ))}
-      <div className="w-full">
+      <div className="mt-4 flex w-full gap-2">
         <Button className="w-100" onClick={() => handleAddLevel(15, 10)}>
           Add Level
         </Button>
