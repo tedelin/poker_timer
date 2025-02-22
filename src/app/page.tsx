@@ -1,5 +1,5 @@
 'use client'
-import { useState, useRef } from 'react'
+import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 
 interface Level {
@@ -79,6 +79,39 @@ export default function TimerSettings() {
     })
   }
 
+  function resetLevels() {
+    setLevels([])
+  }
+
+  function loadConfig(event: React.ChangeEvent<HTMLInputElement>) {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    const reader = new FileReader()
+    reader.onload = (e: ProgressEvent<FileReader>) => {
+      if (!e.target?.result) return
+
+      try {
+        const loadedLevels = JSON.parse(e.target.result as string)
+        setLevels(loadedLevels)
+      } catch (error) {
+        console.error('Error parsing JSON:', error)
+      }
+    }
+
+    reader.readAsText(file)
+  }
+
+  function saveConfig() {
+    const fileData = JSON.stringify(levels)
+    const blob = new Blob([fileData], { type: 'text/plain' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.download = 'levels.json'
+    link.href = url
+    link.click()
+  }
+
   return (
     <div>
       <div className="grid grid-cols-4 gap-4 font-bold">
@@ -100,8 +133,9 @@ export default function TimerSettings() {
           Add Level
         </Button>
         <Button className="w-100">Add Break</Button>
-        <Button>Save Config</Button>
-        <Button>Reset</Button>
+        <Button onClick={saveConfig}>Save Config</Button>
+        <Button onClick={resetLevels}>Reset</Button>
+        <input type="file" accept="application/json" onChange={loadConfig} />
       </div>
     </div>
   )
