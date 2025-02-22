@@ -1,15 +1,10 @@
 'use client'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
+import { Level } from './types/levels'
+import Timer from '../components/timer'
 
-interface Level {
-  id: number
-  duration: number
-  sb: number
-  bb: number
-}
-
-function Level({
+function LevelRow({
   level,
   onUpdate,
   onDelete,
@@ -23,7 +18,7 @@ function Level({
   }
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="grid grid-cols-4 gap-4">
       <div>{level.id}</div>
       <input
         type="number"
@@ -47,6 +42,7 @@ function Level({
 
 export default function TimerSettings() {
   const [levels, setLevels] = useState<Level[]>([])
+  const [isReady, setIsReady] = useState<boolean>(false)
 
   function handleAddLevel(duration: number, bb: number) {
     setLevels((prevLevels) => [
@@ -112,8 +108,13 @@ export default function TimerSettings() {
     link.click()
   }
 
+  if (isReady) {
+    return <Timer levels={levels} />
+  }
+
   return (
     <div>
+      <div>42Poker</div>
       <div className="grid grid-cols-4 gap-4 font-bold">
         <div>Round</div>
         <div>Duration (min)</div>
@@ -121,7 +122,7 @@ export default function TimerSettings() {
         <div>Big Blind</div>
       </div>
       {levels.map((level) => (
-        <Level
+        <LevelRow
           key={level.id}
           level={level}
           onUpdate={handleUpdateLevel}
@@ -136,6 +137,7 @@ export default function TimerSettings() {
         <Button onClick={saveConfig}>Save Config</Button>
         <Button onClick={resetLevels}>Reset</Button>
         <input type="file" accept="application/json" onChange={loadConfig} />
+        <Button onClick={() => setIsReady(true)}>Start</Button>
       </div>
     </div>
   )
