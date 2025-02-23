@@ -2,13 +2,16 @@
 
 import React, { useState, useEffect } from 'react'
 import { LevelsArray } from '../app/types/levels'
+import { Button } from './ui/button'
+import { Pause, Play, SkipForward, TimerReset } from 'lucide-react'
+import FullScreenBtn from './fullscreen'
 
 function FormatTime({ time }: { time: number }) {
   const minutes = Math.floor((time / 1000 / 60) % 60)
   const seconds = Math.floor((time / 1000) % 60)
 
   return (
-    <div>
+    <div className="text-9xl">
       {minutes.toString().padStart(2, '0')}:
       {seconds.toString().padStart(2, '0')}
     </div>
@@ -64,20 +67,46 @@ export default function Timer({ levels }: { levels: LevelsArray }) {
   }
 
   const currentLevel = levels[currentLevelIndex]
+  const nextLevel = levels[currentLevelIndex + 1]
 
   return (
-    <div>
-      <h2>Level {currentLevel?.id || 'N/A'}</h2>
-      <p>
-        Blinds: {currentLevel?.sb}/{currentLevel?.bb}
-      </p>
-      <FormatTime time={timeRemaining} />
+    <div className="flex grow flex-col items-center justify-center bg-gray-900 text-white">
+      <div className="text-5xl font-bold">
+        Level {currentLevel?.id || 'N/A'}
+      </div>
       <div>
-        <button onClick={handleStartPause}>
-          {isRunning ? 'Pause' : 'Play'}
-        </button>
-        <button onClick={handleReset}>Reset</button>
-        <button onClick={handleNextLevel}>Next Level</button>
+        Blinds: {currentLevel?.sb}/{currentLevel?.bb}
+      </div>
+
+      <FormatTime time={timeRemaining} />
+      {nextLevel && (
+        <div>
+          Next: {nextLevel?.sb}/{nextLevel?.bb}
+        </div>
+      )}
+      <div className="flex flex-row gap-4">
+        <Button onClick={handleStartPause}>
+          {isRunning ? (
+            <>
+              <Pause />
+              Pause
+            </>
+          ) : (
+            <>
+              <Play />
+              Play
+            </>
+          )}
+        </Button>
+        <Button onClick={handleNextLevel}>
+          <SkipForward />
+          Next Level
+        </Button>
+        <Button onClick={handleReset}>
+          <TimerReset />
+          Reset
+        </Button>
+        <FullScreenBtn />
       </div>
     </div>
   )

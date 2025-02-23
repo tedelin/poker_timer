@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
+import { Input } from '@/components/ui/input'
 import { Level } from './types/levels'
 import Timer from '../components/timer'
 
@@ -18,19 +19,19 @@ function LevelRow({
   }
 
   return (
-    <div className="grid grid-cols-4 gap-4">
+    <div className="grid grid-cols-5 gap-4">
       <div>{level.id}</div>
-      <input
+      <Input
         type="number"
         value={level.duration}
         onChange={(e) => handleInputChange('duration', Number(e.target.value))}
       />
-      <input
+      <Input
         type="number"
         value={level.sb}
         onChange={(e) => handleInputChange('sb', Number(e.target.value))}
       />
-      <input
+      <Input
         type="number"
         value={level.bb}
         onChange={(e) => handleInputChange('bb', Number(e.target.value))}
@@ -113,9 +114,9 @@ export default function TimerSettings() {
   }
 
   return (
-    <div>
+    <div className="flex grow flex-col items-center gap-4">
       <div>42Poker</div>
-      <div className="grid grid-cols-4 gap-4 font-bold">
+      <div className="grid grid-cols-5 gap-4 overflow-hidden bg-green-400 font-bold">
         <div>Round</div>
         <div>Duration (min)</div>
         <div>Small Blind</div>
@@ -129,15 +130,17 @@ export default function TimerSettings() {
           onDelete={() => handleDeleteLevel(level.id)}
         />
       ))}
-      <div className="mt-4 flex w-full gap-2">
-        <Button className="w-100" onClick={() => handleAddLevel(15, 10)}>
+      <div className="items-center">
+        <Button className="" onClick={() => handleAddLevel(15, 10)}>
           Add Level
         </Button>
-        <Button className="w-100">Add Break</Button>
-        <Button onClick={saveConfig}>Save Config</Button>
+        <Button className="">Add Break</Button>
+      </div>
+      <div>
+        {/* <Button onClick={saveConfig}>Save Config</Button>
         <Button onClick={resetLevels}>Reset</Button>
-        <input type="file" accept="application/json" onChange={loadConfig} />
-        <Button onClick={() => setIsReady(true)}>Start</Button>
+        <Input type="file" accept="application/json" onChange={loadConfig} /> */}
+        <Button onClick={() => setIsReady(true)}>Start Timer</Button>
       </div>
     </div>
   )
