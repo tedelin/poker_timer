@@ -11,7 +11,7 @@ function FormatTime({ time }: { time: number }) {
   const seconds = Math.floor((time / 1000) % 60)
 
   return (
-    <div className="text-9xl">
+    <div className="gap-4 text-9xl">
       {minutes.toString().padStart(2, '0')}:
       {seconds.toString().padStart(2, '0')}
     </div>
@@ -70,7 +70,7 @@ export default function Timer({ levels }: { levels: LevelsArray }) {
   const nextLevel = levels[currentLevelIndex + 1]
 
   return (
-    <div className="flex grow flex-col items-center justify-center bg-gray-900 text-white">
+    <div className="flex grow flex-col items-center gap-4 bg-gray-900 text-white">
       <div className="text-5xl font-bold">
         Level {currentLevel?.id || 'N/A'}
       </div>
@@ -80,7 +80,7 @@ export default function Timer({ levels }: { levels: LevelsArray }) {
 
       <FormatTime time={timeRemaining} />
       {nextLevel && (
-        <div>
+        <div className="gap-4">
           Next: {nextLevel?.sb}/{nextLevel?.bb}
         </div>
       )}

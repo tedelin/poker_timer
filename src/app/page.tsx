@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Level } from './types/levels'
 import Timer from '../components/timer'
+import { CircleMinus, Coffee, Plus } from 'lucide-react'
 
 function LevelRow({
   level,
@@ -36,7 +37,9 @@ function LevelRow({
         value={level.bb}
         onChange={(e) => handleInputChange('bb', Number(e.target.value))}
       />
-      <Button onClick={onDelete}>Delete</Button>
+      <Button onClick={onDelete}>
+        <CircleMinus />
+      </Button>
     </div>
   )
 }
@@ -132,15 +135,21 @@ export default function TimerSettings() {
       ))}
       <div className="items-center">
         <Button className="" onClick={() => handleAddLevel(15, 10)}>
+          <Plus />
           Add Level
         </Button>
-        <Button className="">Add Break</Button>
+        <Button className="">
+          <Coffee />
+          Add Break
+        </Button>
       </div>
       <div>
         {/* <Button onClick={saveConfig}>Save Config</Button>
         <Button onClick={resetLevels}>Reset</Button>
         <Input type="file" accept="application/json" onChange={loadConfig} /> */}
-        <Button onClick={() => setIsReady(true)}>Start Timer</Button>
+        <Button className="bg-green-600" onClick={() => setIsReady(true)}>
+          Start Timer
+        </Button>
       </div>
     </div>
   )
