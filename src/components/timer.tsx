@@ -72,18 +72,18 @@ export default function Timer({ levels }: { levels: LevelsArray }) {
   return (
     <div className="flex grow flex-col items-center gap-4 bg-gray-900 text-white">
       <div className="text-5xl font-bold">
-        Level {currentLevel?.id || 'N/A'}
+        {currentLevel?.break ? 'Break' : `Level ${currentLevel?.id}`}
       </div>
       <div>
-        Blinds: {currentLevel?.sb}/{currentLevel?.bb}
+        {currentLevel?.bb && `Blinds: ${currentLevel?.sb}/${currentLevel?.bb}`}
       </div>
 
       <FormatTime time={timeRemaining} />
-      {nextLevel && (
-        <div className="gap-4">
-          Next: {nextLevel?.sb}/{nextLevel?.bb}
-        </div>
-      )}
+      <div className="gap-4">
+        {nextLevel?.bb
+          ? `Next: ${nextLevel?.sb}/${nextLevel?.bb}`
+          : 'Next: Break'}
+      </div>
       <div className="flex flex-row gap-4">
         <Button onClick={handleStartPause}>
           {isRunning ? (

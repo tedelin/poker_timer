@@ -21,22 +21,32 @@ function LevelRow({
 
   return (
     <div className="grid grid-cols-5 gap-4">
-      <div>{level.id}</div>
+      <div>{level.break ? 'Break' : level.id}</div>
       <Input
         type="number"
         value={level.duration}
         onChange={(e) => handleInputChange('duration', Number(e.target.value))}
       />
-      <Input
-        type="number"
-        value={level.sb}
-        onChange={(e) => handleInputChange('sb', Number(e.target.value))}
-      />
-      <Input
-        type="number"
-        value={level.bb}
-        onChange={(e) => handleInputChange('bb', Number(e.target.value))}
-      />
+      {level.break ? (
+        <>
+          <div></div>
+          <div></div>
+        </>
+      ) : (
+        <>
+          <Input
+            type="number"
+            value={level.sb}
+            onChange={(e) => handleInputChange('sb', Number(e.target.value))}
+          />
+          <Input
+            type="number"
+            value={level.bb}
+            onChange={(e) => handleInputChange('bb', Number(e.target.value))}
+          />
+        </>
+      )}
+
       <Button onClick={onDelete}>
         <CircleMinus />
       </Button>
@@ -48,12 +58,24 @@ export default function TimerSettings() {
   const [levels, setLevels] = useState<Level[]>([])
   const [isReady, setIsReady] = useState<boolean>(false)
 
+  function handleAddBreak(duration: number) {
+    setLevels((prevLevels) => [
+      ...prevLevels,
+      {
+        id: prevLevels.length + 1,
+        duration,
+        break: true,
+      },
+    ])
+  }
+
   function handleAddLevel(duration: number, bb: number) {
     setLevels((prevLevels) => [
       ...prevLevels,
       {
         id: prevLevels.length + 1,
         duration,
+        break: false,
         bb,
         sb: bb / 2,
       },
@@ -133,12 +155,12 @@ export default function TimerSettings() {
           onDelete={() => handleDeleteLevel(level.id)}
         />
       ))}
-      <div className="items-center">
+      <div className="flex items-center gap-4">
         <Button className="" onClick={() => handleAddLevel(15, 10)}>
           <Plus />
           Add Level
         </Button>
-        <Button className="">
+        <Button className="" onClick={() => handleAddBreak(15)}>
           <Coffee />
           Add Break
         </Button>
