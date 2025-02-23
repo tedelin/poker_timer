@@ -143,7 +143,7 @@ export default function TimerSettings() {
   return (
     <div className="flex max-h-full grow flex-col items-center gap-4 bg-slate-900 text-white">
       <div className="mt-3 text-xl font-bold">42Poker - Tournament Timer</div>
-      <div className="grid min-h-96 grid-cols-5 gap-4 overflow-y-auto rounded-md p-4 font-bold">
+      <div className="grid h-dvh grid-cols-5 gap-4 overflow-y-auto rounded-md p-4 font-bold">
         <div className="text-center">Round</div>
         <div>Duration (min)</div>
         <div>Small Blind</div>
@@ -174,17 +174,17 @@ export default function TimerSettings() {
           Add Break
         </Button>
       </div>
-      <div className="">
-        {/* <Button onClick={saveConfig}>Save Config</Button>
+      <Button
+        className="mb-10 bg-green-600 font-bold hover:bg-green-700"
+        onClick={() => setIsReady(true)}
+      >
+        Start Timer
+      </Button>
+      {/* <div className="w-100 mb-10 grow bg-blue-700">
+        <Button onClick={saveConfig}>Save Config</Button>
         <Button onClick={resetLevels}>Reset</Button>
-        <Input type="file" accept="application/json" onChange={loadConfig} /> */}
-        <Button
-          className="bg-green-600 font-bold hover:bg-green-700"
-          onClick={() => setIsReady(true)}
-        >
-          Start Timer
-        </Button>
-      </div>
+        <Input type="file" accept="application/json" onChange={loadConfig} />
+      </div> */}
     </div>
   )
 }
