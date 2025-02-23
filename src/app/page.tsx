@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Level } from './types/levels'
 import Timer from '../components/timer'
-import { CircleMinus, Coffee, Plus } from 'lucide-react'
+import { CircleMinus, Coffee, Minus, Plus } from 'lucide-react'
 
 function LevelRow({
   level,
@@ -20,8 +20,8 @@ function LevelRow({
   }
 
   return (
-    <div className="grid grid-cols-5 gap-4">
-      <div>{level.break ? 'Break' : level.id}</div>
+    <>
+      <div className="text-center">{level.break ? 'Break' : level.id}</div>
       <Input
         type="number"
         value={level.duration}
@@ -46,11 +46,13 @@ function LevelRow({
           />
         </>
       )}
-
-      <Button onClick={onDelete}>
-        <CircleMinus />
+      <Button
+        onClick={onDelete}
+        className="w-10 border-none bg-transparent text-white shadow-none hover:bg-red-200"
+      >
+        <Minus className="text-center text-red-500" />
       </Button>
-    </div>
+    </>
   )
 }
 
@@ -139,37 +141,47 @@ export default function TimerSettings() {
   }
 
   return (
-    <div className="flex grow flex-col items-center gap-4">
-      <div>42Poker</div>
-      <div className="grid grid-cols-5 gap-4 overflow-hidden bg-green-400 font-bold">
-        <div>Round</div>
+    <div className="flex max-h-full grow flex-col items-center gap-4 bg-slate-900 text-white">
+      <div className="mt-3 text-xl font-bold">42Poker - Tournament Timer</div>
+      <div className="grid min-h-96 grid-cols-5 gap-4 overflow-y-auto rounded-md p-4 font-bold">
+        <div className="text-center">Round</div>
         <div>Duration (min)</div>
         <div>Small Blind</div>
         <div>Big Blind</div>
+        <div></div>
+        {levels.map((level) => (
+          <LevelRow
+            key={level.id}
+            level={level}
+            onUpdate={handleUpdateLevel}
+            onDelete={() => handleDeleteLevel(level.id)}
+          />
+        ))}
       </div>
-      {levels.map((level) => (
-        <LevelRow
-          key={level.id}
-          level={level}
-          onUpdate={handleUpdateLevel}
-          onDelete={() => handleDeleteLevel(level.id)}
-        />
-      ))}
       <div className="flex items-center gap-4">
-        <Button className="" onClick={() => handleAddLevel(15, 10)}>
+        <Button
+          className="border-none bg-transparent font-bold text-green-600 shadow-none hover:bg-green-200"
+          onClick={() => handleAddLevel(15, 10)}
+        >
           <Plus />
           Add Level
         </Button>
-        <Button className="" onClick={() => handleAddBreak(15)}>
+        <Button
+          className="border-none bg-transparent font-bold text-indigo-700 shadow-none hover:bg-indigo-200"
+          onClick={() => handleAddBreak(15)}
+        >
           <Coffee />
           Add Break
         </Button>
       </div>
-      <div>
+      <div className="">
         {/* <Button onClick={saveConfig}>Save Config</Button>
         <Button onClick={resetLevels}>Reset</Button>
         <Input type="file" accept="application/json" onChange={loadConfig} /> */}
-        <Button className="bg-green-600" onClick={() => setIsReady(true)}>
+        <Button
+          className="bg-green-600 font-bold hover:bg-green-700"
+          onClick={() => setIsReady(true)}
+        >
           Start Timer
         </Button>
       </div>

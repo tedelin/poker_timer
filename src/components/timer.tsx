@@ -70,7 +70,7 @@ export default function Timer({ levels }: { levels: LevelsArray }) {
   const nextLevel = levels[currentLevelIndex + 1]
 
   return (
-    <div className="flex grow flex-col items-center gap-4 bg-gray-900 text-white">
+    <div className="flex grow flex-col items-center gap-4 bg-slate-900 text-white">
       <div className="text-5xl font-bold">
         {currentLevel?.break ? 'Break' : `Level ${currentLevel?.id}`}
       </div>

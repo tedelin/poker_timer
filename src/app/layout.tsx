@@ -28,7 +28,7 @@ export default function RootLayout({
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       </head>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} flex h-screen bg-red-700 antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} flex h-screen overflow-hidden antialiased`}
       >
         {children}
       </body>
