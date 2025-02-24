@@ -1,6 +1,6 @@
 'use client'
 
-import { Home, Pause, Play, SkipForward, TimerReset } from 'lucide-react'
+import { Cog, Pause, Play, SkipForward, TimerReset } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { LevelsArray } from '../app/types/levels'
 import FullScreenBtn from './fullscreen'
@@ -68,8 +68,7 @@ export default function Timer({
 
   function handleReset() {
     setIsRunning(false)
-    setCurrentLevelIndex(0)
-    setTimeRemaining((levels[0]?.duration || 0) * 60 * 1000)
+    setTimeRemaining((currentLevel?.duration || 0) * 60 * 1000)
   }
 
   const currentLevel = levels[currentLevelIndex]
@@ -120,8 +119,8 @@ export default function Timer({
         </Button>
         <FullScreenBtn />
         <Button onClick={() => setIsReady(false)} variant="ghost">
-          <Home />
-          Home
+          <Cog />
+          Settings
         </Button>
       </div>
     </div>
