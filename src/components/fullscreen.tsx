@@ -1,6 +1,6 @@
+import { Maximize, Minimize } from 'lucide-react'
 import { useState } from 'react'
 import { Button } from './ui/button'
-import { Maximize, Minimize } from 'lucide-react'
 
 function FullScreenBtn() {
   const [isFullscreen, setIsFullscreen] = useState(false)
@@ -20,12 +20,10 @@ function FullScreenBtn() {
       {isFullscreen ? (
         <>
           <Minimize />
-          Fullscreen
         </>
       ) : (
         <>
           <Maximize />
-          Fullscreen
         </>
       )}
     </Button>

@@ -1,26 +1,20 @@
+import { Level } from '@/app/types/levels'
 import { useEffect, useState } from 'react'
 
 interface TimerProgressBarProps {
-  duration: number // Duration in minutes
+  level: Level // Duration in minutes
   isRunning: boolean
-  onTimeUp?: () => void
 }
 
 export default function TimerProgressBar({
-  duration,
+  level,
   isRunning,
-  onTimeUp,
 }: TimerProgressBarProps) {
-  const durationSeconds = duration * 60
+  const durationSeconds = level.duration * 60
   const [timePassed, setTimePassed] = useState(0)
   const progress = (timePassed / durationSeconds) * 100
 
   useEffect(() => {
-    if (timePassed >= durationSeconds) {
-      onTimeUp?.()
-      return
-    }
-
     let timer: NodeJS.Timeout
 
     if (isRunning) {
@@ -30,12 +24,16 @@ export default function TimerProgressBar({
     }
 
     return () => clearInterval(timer)
-  }, [timePassed, durationSeconds, onTimeUp])
+  }, [timePassed, durationSeconds, isRunning])
+
+  useEffect(() => {
+    setTimePassed(0)
+  }, [level])
 
   return (
     <div className="relative mb-4 h-8 w-full max-w-2xl overflow-hidden rounded bg-zinc-800">
       <div
-        className="h-full bg-green-500 transition-all duration-100 ease-linear"
+        className="h-full bg-green-300 transition-all duration-100 ease-linear"
         style={{ width: `${progress}%` }}
       />
     </div>

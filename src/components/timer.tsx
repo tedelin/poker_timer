@@ -83,13 +83,10 @@ export default function Timer({
         {currentLevel?.bb &&
           `Blinds: ${currentLevel?.sb} / ${currentLevel?.bb}`}
       </p>
+      <p>Next Break: </p>
 
       <FormatTime time={timeRemaining} />
-      <TimerProgressBar
-        duration={currentLevel.duration}
-        isRunning={isRunning}
-        onTimeUp={() => alert("Time's up!")}
-      />
+      <TimerProgressBar level={currentLevel} isRunning={isRunning} />
       <div className="mb-8 text-lg">
         {nextLevel?.bb
           ? `Next: ${nextLevel?.sb} / ${nextLevel?.bb}`
@@ -100,28 +97,23 @@ export default function Timer({
           {isRunning ? (
             <>
               <Pause />
-              Pause
             </>
           ) : (
             <>
               <Play />
-              Play
             </>
           )}
         </Button>
         <Button variant="ghost" onClick={handleNextLevel}>
           <SkipForward />
-          Next Level
         </Button>
         <Button variant="ghost" onClick={handleReset}>
           <TimerReset />
-          Reset
         </Button>
-        <FullScreenBtn />
         <Button onClick={() => setIsReady(false)} variant="ghost">
           <Cog />
-          Settings
         </Button>
+        <FullScreenBtn />
       </div>
     </div>
   )
