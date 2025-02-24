@@ -1,62 +1,27 @@
 'use client'
+
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
 import { Level } from './types/levels'
 import Timer from '../components/timer'
-import { Coffee, Minus, Plus } from 'lucide-react'
+import { Coffee, Plus } from 'lucide-react'
 
-function LevelRow({
-  level,
-  onUpdate,
-  onDelete,
-}: {
-  level: Level
-  onUpdate: (updatedLevel: Level) => void
-  onDelete: () => void
-}) {
-  function handleInputChange(key: keyof Level, value: number) {
-    onUpdate({ ...level, [key]: value })
-  }
+import {
+  DndContext,
+  closestCenter,
+  useSensor,
+  useSensors,
+  PointerSensor,
+} from '@dnd-kit/core'
+import {
+  SortableContext,
+  verticalListSortingStrategy,
+  arrayMove,
+} from '@dnd-kit/sortable'
+import SortableItem from '@/components/SortableItem'
+import { Input } from '@/components/ui/input'
 
-  return (
-    <>
-      <div className="text-center">{level.break ? 'Break' : level.id}</div>
-      <Input
-        type="number"
-        value={level.duration}
-        onChange={(e) => handleInputChange('duration', Number(e.target.value))}
-      />
-      {level.break ? (
-        <>
-          <div></div>
-          <div></div>
-        </>
-      ) : (
-        <>
-          <Input
-            type="number"
-            value={level.sb}
-            onChange={(e) => handleInputChange('sb', Number(e.target.value))}
-          />
-          <Input
-            type="number"
-            value={level.bb}
-            onChange={(e) => handleInputChange('bb', Number(e.target.value))}
-          />
-        </>
-      )}
-      <Button
-        onClick={onDelete}
-        className="w-10 border-none bg-transparent text-white shadow-none hover:bg-red-200"
-      >
-        <Minus className="text-center text-red-500" />
-      </Button>
-    </>
-  )
-}
-
-export default function TimerSettings() {
+function TimerSettings() {
   const [levels, setLevels] = useState<Level[]>([])
   const [isReady, setIsReady] = useState<boolean>(false)
 
@@ -95,12 +60,27 @@ export default function TimerSettings() {
   function handleDeleteLevel(levelId: number) {
     setLevels((prevLevels) => {
       const updatedLevels = prevLevels.filter((l) => l.id !== levelId)
-
       return updatedLevels.map((level, index) => ({
         ...level,
         id: index + 1,
       }))
     })
+  }
+
+  // Handle drag end and reordering
+  function handleDragEnd(event: any) {
+    const { active, over } = event
+    if (active.id !== over.id) {
+      setLevels((prevLevels) => {
+        const oldIndex = prevLevels.findIndex((level) => level.id === active.id)
+        const newIndex = prevLevels.findIndex((level) => level.id === over.id)
+        const newArray = arrayMove(prevLevels, oldIndex, newIndex)
+        return newArray.map((level, index) => ({
+          ...level,
+          id: index + 1,
+        }))
+      })
+    }
   }
 
   function resetLevels() {
@@ -136,6 +116,8 @@ export default function TimerSettings() {
     link.click()
   }
 
+  const sensors = useSensors(useSensor(PointerSensor))
+
   if (isReady) {
     return <Timer levels={levels} />
   }
@@ -143,23 +125,34 @@ export default function TimerSettings() {
   return (
     <div className="flex max-h-full grow flex-col items-center gap-4 bg-slate-900 text-white">
       <div className="mt-3 text-xl font-bold">42Poker - Tournament Timer</div>
-      <div className="grid grid-cols-5 gap-4 rounded-md p-4 font-bold">
+      <div className="grid grid-cols-6 gap-4 rounded-md p-4 font-bold">
         <div className="text-center">Round</div>
         <div>Duration (min)</div>
         <div>Small Blind</div>
         <div>Big Blind</div>
         <div></div>
+        <div></div>
       </div>
-      <div className="scrollbar-none grid h-dvh grid-cols-5 gap-4 overflow-y-auto rounded-md p-4 font-bold">
-        {levels.map((level) => (
-          <LevelRow
-            key={level.id}
-            level={level}
-            onUpdate={handleUpdateLevel}
-            onDelete={() => handleDeleteLevel(level.id)}
-          />
-        ))}
-      </div>
+
+      <DndContext
+        sensors={sensors}
+        collisionDetection={closestCenter}
+        onDragEnd={handleDragEnd}
+      >
+        <SortableContext items={levels} strategy={verticalListSortingStrategy}>
+          <div className="scrollbar-none grid h-dvh grid-cols-1 gap-4 overflow-y-auto rounded-md p-4 font-bold">
+            {levels.map((level) => (
+              <SortableItem
+                key={level.id}
+                level={level}
+                onUpdate={handleUpdateLevel}
+                onDelete={() => handleDeleteLevel(level.id)}
+              />
+            ))}
+          </div>
+        </SortableContext>
+      </DndContext>
+
       <div className="flex items-center gap-4">
         <Button
           className="border-none bg-transparent font-bold text-green-600 shadow-none hover:bg-green-200"
@@ -182,11 +175,13 @@ export default function TimerSettings() {
       >
         Start Timer
       </Button>
-      {/* <div className="w-100 mb-10 grow bg-blue-700">
+      <div className="w-100 mb-10 grow bg-blue-700">
         <Button onClick={saveConfig}>Save Config</Button>
         <Button onClick={resetLevels}>Reset</Button>
         <Input type="file" accept="application/json" onChange={loadConfig} />
-      </div> */}
+      </div>
     </div>
   )
 }
+
+export default TimerSettings
