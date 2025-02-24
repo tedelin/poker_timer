@@ -123,10 +123,9 @@ function TimerSettings() {
           <Download />
           Save Config
         </Button>
-        {/* <input type="file" accept="application/json" onChange={loadConfig} /> */}
       </div>
       <Button
-        className="w-lg mb-10 bg-green-600 font-bold hover:bg-green-700"
+        className="mb-10 w-96 bg-green-600 font-bold hover:bg-green-700"
         onClick={() => setIsReady(true)}
       >
         Start Timer

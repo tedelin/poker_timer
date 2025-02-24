@@ -75,7 +75,7 @@ export default function Timer({
   const nextLevel = levels[currentLevelIndex + 1]
 
   return (
-    <div className="flex flex-grow flex-col items-center justify-center bg-zinc-900 text-white">
+    <div className="flex flex-grow flex-col items-center justify-center bg-zinc-900 px-4 text-white">
       <h2 className="mb-2 text-7xl font-bold">
         {currentLevel?.break ? 'Break' : `Level ${currentLevel?.id}`}
       </h2>
@@ -95,7 +95,7 @@ export default function Timer({
           ? `Next: ${nextLevel?.sb} / ${nextLevel?.bb}`
           : 'Next: Break'}
       </div>
-      <div className="flex flex-row gap-4">
+      <div className="flex flex-row flex-wrap items-center justify-center gap-4">
         <Button variant="ghost" onClick={handleStartPause}>
           {isRunning ? (
             <>
