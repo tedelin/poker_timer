@@ -18,37 +18,47 @@ export default function LevelRow({
 
   return (
     <>
-      <div className="text-center">{level.break ? 'Break' : level.id}</div>
-      <Input
-        type="number"
-        value={level.duration}
-        onChange={(e) => handleInputChange('duration', Number(e.target.value))}
-      />
+      <td>
+        <Input
+          type="number"
+          value={level.duration}
+          onChange={(e) =>
+            handleInputChange('duration', Number(e.target.value))
+          }
+        />
+      </td>
       {level.break ? (
         <>
-          <div></div>
-          <div></div>
+          <td></td>
+          <td></td>
         </>
       ) : (
         <>
-          <Input
-            type="number"
-            value={level.sb}
-            onChange={(e) => handleInputChange('sb', Number(e.target.value))}
-          />
-          <Input
-            type="number"
-            value={level.bb}
-            onChange={(e) => handleInputChange('bb', Number(e.target.value))}
-          />
+          <td>
+            <Input
+              type="number"
+              value={level.sb}
+              onChange={(e) => handleInputChange('sb', Number(e.target.value))}
+            />
+          </td>
+          <td>
+            <Input
+              type="number"
+              value={level.bb}
+              onChange={(e) => handleInputChange('bb', Number(e.target.value))}
+            />
+          </td>
         </>
       )}
-      <Button
-        onClick={onDelete}
-        className="w-10 border-none bg-transparent text-white shadow-none hover:bg-red-200"
-      >
-        <Minus className="text-center text-red-500" />
-      </Button>
+      <td>
+        <Button
+          onClick={onDelete}
+          variant="ghost"
+          className="w-10 hover:bg-red-200"
+        >
+          <Minus className="text-center text-red-500" />
+        </Button>
+      </td>
     </>
   )
 }

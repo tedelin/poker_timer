@@ -1,24 +1,30 @@
 'use client'
 
-import React, { useState, useEffect } from 'react'
+import { Home, Pause, Play, SkipForward, TimerReset } from 'lucide-react'
+import { useEffect, useState } from 'react'
 import { LevelsArray } from '../app/types/levels'
-import { Button } from './ui/button'
-import { Pause, Play, SkipForward, TimerReset } from 'lucide-react'
 import FullScreenBtn from './fullscreen'
+import TimerProgressBar from './ProgressBar'
+import { Button } from './ui/button'
 
 function FormatTime({ time }: { time: number }) {
   const minutes = Math.floor((time / 1000 / 60) % 60)
   const seconds = Math.floor((time / 1000) % 60)
 
   return (
-    <div className="gap-4 text-9xl">
-      {minutes.toString().padStart(2, '0')}:
-      {seconds.toString().padStart(2, '0')}
+    <div className="mb-8 font-mono text-[20vmin] font-bold tabular-nums leading-none">
+      {`${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`}
     </div>
   )
 }
 
-export default function Timer({ levels }: { levels: LevelsArray }) {
+export default function Timer({
+  levels,
+  setIsReady,
+}: {
+  levels: LevelsArray
+  setIsReady: React.Dispatch<React.SetStateAction<boolean>>
+}) {
   const [currentLevelIndex, setCurrentLevelIndex] = useState(0)
   const [timeRemaining, setTimeRemaining] = useState(
     (levels[0]?.duration || 0) * 60 * 1000
@@ -70,22 +76,28 @@ export default function Timer({ levels }: { levels: LevelsArray }) {
   const nextLevel = levels[currentLevelIndex + 1]
 
   return (
-    <div className="flex grow flex-col items-center gap-4 bg-slate-900 text-white">
-      <div className="text-5xl font-bold">
+    <div className="flex flex-grow flex-col items-center justify-center bg-zinc-900 text-white">
+      <h2 className="mb-2 text-7xl font-bold">
         {currentLevel?.break ? 'Break' : `Level ${currentLevel?.id}`}
-      </div>
-      <div>
-        {currentLevel?.bb && `Blinds: ${currentLevel?.sb}/${currentLevel?.bb}`}
-      </div>
+      </h2>
+      <p className="mb-8 text-xl">
+        {currentLevel?.bb &&
+          `Blinds: ${currentLevel?.sb} / ${currentLevel?.bb}`}
+      </p>
 
       <FormatTime time={timeRemaining} />
-      <div className="gap-4">
+      <TimerProgressBar
+        duration={currentLevel.duration}
+        isRunning={isRunning}
+        onTimeUp={() => alert("Time's up!")}
+      />
+      <div className="mb-8 text-lg">
         {nextLevel?.bb
-          ? `Next: ${nextLevel?.sb}/${nextLevel?.bb}`
+          ? `Next: ${nextLevel?.sb} / ${nextLevel?.bb}`
           : 'Next: Break'}
       </div>
       <div className="flex flex-row gap-4">
-        <Button onClick={handleStartPause}>
+        <Button variant="ghost" onClick={handleStartPause}>
           {isRunning ? (
             <>
               <Pause />
@@ -98,15 +110,19 @@ export default function Timer({ levels }: { levels: LevelsArray }) {
             </>
           )}
         </Button>
-        <Button onClick={handleNextLevel}>
+        <Button variant="ghost" onClick={handleNextLevel}>
           <SkipForward />
           Next Level
         </Button>
-        <Button onClick={handleReset}>
+        <Button variant="ghost" onClick={handleReset}>
           <TimerReset />
           Reset
         </Button>
         <FullScreenBtn />
+        <Button onClick={() => setIsReady(false)} variant="ghost">
+          <Home />
+          Home
+        </Button>
       </div>
     </div>
   )

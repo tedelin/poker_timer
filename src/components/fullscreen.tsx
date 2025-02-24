@@ -16,7 +16,7 @@ function FullScreenBtn() {
   }
 
   return (
-    <Button onClick={toggleFullscreen}>
+    <Button variant="ghost" onClick={toggleFullscreen}>
       {isFullscreen ? (
         <>
           <Minimize />
