@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Level } from './types/levels'
 import Timer from '../components/timer'
-import { CircleMinus, Coffee, Minus, Plus } from 'lucide-react'
+import { Coffee, Minus, Plus } from 'lucide-react'
 
 function LevelRow({
   level,
@@ -143,12 +143,14 @@ export default function TimerSettings() {
   return (
     <div className="flex max-h-full grow flex-col items-center gap-4 bg-slate-900 text-white">
       <div className="mt-3 text-xl font-bold">42Poker - Tournament Timer</div>
-      <div className="grid h-dvh grid-cols-5 gap-4 overflow-y-auto rounded-md p-4 font-bold">
+      <div className="grid grid-cols-5 gap-4 rounded-md p-4 font-bold">
         <div className="text-center">Round</div>
         <div>Duration (min)</div>
         <div>Small Blind</div>
         <div>Big Blind</div>
         <div></div>
+      </div>
+      <div className="scrollbar-none grid h-dvh grid-cols-5 gap-4 overflow-y-auto rounded-md p-4 font-bold">
         {levels.map((level) => (
           <LevelRow
             key={level.id}

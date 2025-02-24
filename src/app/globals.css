@@ -71,13 +71,20 @@ body {
   }
 }
 
-
-
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
   body {
     @apply bg-background text-foreground;
+  }
+}
+
+@layer utilities {
+  .scrollbar-none {
+    scrollbar-width: none; /* Hide scrollbar for Firefox */
+  }
+  .scrollbar-none::-webkit-scrollbar {
+    display: none; /* Hide scrollbar for Chrome, Safari, Edge */
   }
 }
