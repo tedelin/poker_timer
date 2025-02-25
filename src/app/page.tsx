@@ -121,7 +121,7 @@ function TimerSettings() {
       <div className="mb-2 flex items-center gap-4">
         <label className="inline-flex h-9 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0">
           <Upload />
-          Load Config
+          Load
           <input
             type="file"
             className="hidden"
@@ -133,9 +133,9 @@ function TimerSettings() {
           <RotateCcw />
           Reset
         </Button>
-        <Button variant="ghost" onClick={saveConfig} className="font-bold">
+        <Button variant="ghost" onClick={saveConfig}>
           <Download />
-          Save Config
+          Save
         </Button>
       </div>
       <Button
