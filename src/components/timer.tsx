@@ -5,7 +5,7 @@ import { useEffect, useState } from 'react'
 import useSound from 'use-sound'
 import { LevelsArray } from '../app/types/levels'
 import FormatTime from './FormatTime'
-import FullScreenBtn from './fullscreen'
+import FullScreenBtn from './FullscreenBtn'
 import TimerProgressBar from './ProgressBar'
 import { Button } from './ui/button'
 
