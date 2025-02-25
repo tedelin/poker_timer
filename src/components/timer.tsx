@@ -2,21 +2,12 @@
 
 import { Cog, Pause, Play, SkipForward, TimerReset } from 'lucide-react'
 import { useEffect, useState } from 'react'
+import useSound from 'use-sound'
 import { LevelsArray } from '../app/types/levels'
+import FormatTime from './FormatTime'
 import FullScreenBtn from './fullscreen'
 import TimerProgressBar from './ProgressBar'
 import { Button } from './ui/button'
-
-function FormatTime({ time }: { time: number }) {
-  const minutes = Math.floor((time / 1000 / 60) % 60)
-  const seconds = Math.floor((time / 1000) % 60)
-
-  return (
-    <div className="mb-8 font-mono text-[20vmin] font-bold tabular-nums leading-none">
-      {`${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`}
-    </div>
-  )
-}
 
 export default function Timer({
   levels,
@@ -30,9 +21,42 @@ export default function Timer({
     (levels[0]?.duration || 0) * 60 * 1000
   )
   const [isRunning, setIsRunning] = useState(true)
+  const [readySound] = useSound('/sounds/en/ready.mp3')
+  const [startSound] = useSound('/sounds/en/start.mp3')
+  const [nextLevelSound] = useSound('/sounds/en/warning.mp3')
+  const [warningBreakSound] = useSound('/sounds/en/warning_break.mp3')
+
+  async function generateVoice(text: string, voiceId: string) {
+    const response = await fetch('/api/generate-voice', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ text, voice_id: voiceId }),
+    })
+    if (!response.ok) {
+      alert('Erreur lors de la génération de la voix')
+      return
+    }
+    const audioBlob = await response.blob()
+    const audioUrl = URL.createObjectURL(audioBlob)
+
+    const audio = new Audio(audioUrl)
+    audio.play()
+  }
+
+  useEffect(() => {
+    readySound()
+  }, [readySound])
 
   useEffect(() => {
     let timer: NodeJS.Timeout
+
+    if (timeRemaining == 1 && nextLevel.break) {
+      warningBreakSound()
+    }
+
+    if (timeRemaining == 300000) {
+      nextLevelSound()
+    }
 
     if (isRunning && timeRemaining > 0) {
       timer = setInterval(() => {
@@ -51,11 +75,18 @@ export default function Timer({
   }, [isRunning, timeRemaining])
 
   function handleStartPause() {
+    if (currentLevelIndex == 0 && !isRunning) {
+      startSound()
+    }
     setIsRunning((prev) => !prev)
   }
 
   function handleNextLevel() {
     if (currentLevelIndex < levels.length - 1) {
+      generateVoice(
+        `Your attention please, blinds are up! Blinds are now ${nextLevel.sb} ${nextLevel.bb}`,
+        'pqHfZKP75CvOlQylNhV4'
+      )
       const nextIndex = currentLevelIndex + 1
       setCurrentLevelIndex(nextIndex)
       setTimeRemaining(levels[nextIndex].duration * 60 * 1000)
