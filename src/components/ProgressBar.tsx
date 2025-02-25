@@ -10,7 +10,7 @@ export default function TimerProgressBar({
   level,
   isRunning,
 }: TimerProgressBarProps) {
-  const durationSeconds = level.duration * 60
+  const durationSeconds = level?.duration * 60
   const [timePassed, setTimePassed] = useState(0)
   const progress = (timePassed / durationSeconds) * 100
 
