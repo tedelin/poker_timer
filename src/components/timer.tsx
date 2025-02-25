@@ -20,7 +20,7 @@ export default function Timer({
   const [timeRemaining, setTimeRemaining] = useState(
     (levels[0]?.duration || 0) * 60 * 1000
   )
-  const [isRunning, setIsRunning] = useState(true)
+  const [isRunning, setIsRunning] = useState(false)
   const [readySound] = useSound('/sounds/en/ready.mp3')
   const [startSound] = useSound('/sounds/en/start.mp3')
   const [nextLevelSound] = useSound('/sounds/en/warning.mp3')
@@ -72,7 +72,7 @@ export default function Timer({
     }
 
     return () => clearInterval(timer)
-  }, [isRunning, timeRemaining])
+  }, [isRunning, timeRemaining, currentLevelIndex])
 
   function handleStartPause() {
     if (currentLevelIndex == 0 && !isRunning) {
@@ -82,19 +82,21 @@ export default function Timer({
   }
 
   function handleNextLevel() {
-    if (currentLevelIndex < levels.length - 1) {
-      generateVoice(
-        `Your attention please, blinds are up! Blinds are now ${nextLevel.sb} ${nextLevel.bb}`,
-        'pqHfZKP75CvOlQylNhV4'
-      )
-      const nextIndex = currentLevelIndex + 1
-      setCurrentLevelIndex(nextIndex)
+    if (!nextLevel) return
+    generateVoice(
+      `Your attention please, blinds are up! Blinds are now ${nextLevel.sb} ${nextLevel.bb}`,
+      'pqHfZKP75CvOlQylNhV4'
+    )
+    setCurrentLevelIndex((prevIndex) => {
+      const nextIndex = prevIndex + 1
+      if (nextIndex >= levels.length) {
+        setIsRunning(false)
+        return prevIndex
+      }
       setTimeRemaining(levels[nextIndex].duration * 60 * 1000)
       setIsRunning(true)
-    } else {
-      setIsRunning(false)
-      alert('Tournament Ended!')
-    }
+      return nextIndex
+    })
   }
 
   function handleReset() {
