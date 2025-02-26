@@ -1,7 +1,7 @@
 import { Level } from '@/app/types/levels'
-import { Input } from './ui/input'
-import { Button } from './ui/button'
 import { Minus } from 'lucide-react'
+import { Button } from './ui/button'
+import { Input } from './ui/input'
 
 export default function LevelRow({
   level,

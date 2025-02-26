@@ -1,10 +1,12 @@
 'use client'
 
+import formatNumber from '@/app/utils/formatNumber'
+import formatTime from '@/app/utils/formatTime'
+import generateVoice from '@/app/utils/generateVoice'
 import { Cog, Pause, Play, SkipForward, TimerReset } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import useSound from 'use-sound'
 import { LevelsArray } from '../app/types/levels'
-import FormatTime from './FormatTime'
 import FullScreenBtn from './FullscreenBtn'
 import TimerProgressBar from './ProgressBar'
 import { Button } from './ui/button'
@@ -20,59 +22,14 @@ export default function Timer({
   const [timeRemaining, setTimeRemaining] = useState(
     (levels[0]?.duration || 0) * 60 * 1000
   )
+  const [timeToBreak, setTimeToBreak] = useState(0)
   const [isRunning, setIsRunning] = useState(false)
   const [readySound] = useSound('/sounds/en/ready.mp3')
   const [startSound] = useSound('/sounds/en/start.mp3')
   const [nextLevelSound] = useSound('/sounds/en/warning.mp3')
   const [warningBreakSound] = useSound('/sounds/en/warning_break.mp3')
-
-  async function generateVoice(text: string, voiceId: string) {
-    const response = await fetch('/api/generate-voice', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ text, voice_id: voiceId }),
-    })
-    if (!response.ok) {
-      alert('Erreur lors de la génération de la voix')
-      return
-    }
-    const audioBlob = await response.blob()
-    const audioUrl = URL.createObjectURL(audioBlob)
-
-    const audio = new Audio(audioUrl)
-    audio.play()
-  }
-
-  useEffect(() => {
-    readySound()
-  }, [readySound])
-
-  useEffect(() => {
-    let timer: NodeJS.Timeout
-
-    if (timeRemaining == 1 && nextLevel.break) {
-      warningBreakSound()
-    }
-
-    if (timeRemaining == 300000) {
-      nextLevelSound()
-    }
-
-    if (isRunning && timeRemaining > 0) {
-      timer = setInterval(() => {
-        setTimeRemaining((prevTime) => {
-          if (prevTime <= 1000) {
-            clearInterval(timer)
-            handleNextLevel()
-            return 0
-          }
-          return prevTime - 1000
-        })
-      }, 1000)
-    }
-
-    return () => clearInterval(timer)
-  }, [isRunning, timeRemaining, currentLevelIndex])
+  const currentLevel = levels[currentLevelIndex]
+  const nextLevel = levels[currentLevelIndex + 1]
 
   function handleStartPause() {
     if (currentLevelIndex == 0 && !isRunning) {
@@ -83,10 +40,6 @@ export default function Timer({
 
   function handleNextLevel() {
     if (!nextLevel) return
-    generateVoice(
-      `Your attention please, blinds are up! Blinds are now ${nextLevel.sb} ${nextLevel.bb}`,
-      'pqHfZKP75CvOlQylNhV4'
-    )
     setCurrentLevelIndex((prevIndex) => {
       const nextIndex = prevIndex + 1
       if (nextIndex >= levels.length) {
@@ -94,6 +47,15 @@ export default function Timer({
         return prevIndex
       }
       setTimeRemaining(levels[nextIndex].duration * 60 * 1000)
+      if (!nextLevel.break) {
+        generateVoice(
+          `Your attention please, blinds are up! Blinds are now ${nextLevel.sb} ${nextLevel.bb}`,
+          'pqHfZKP75CvOlQylNhV4'
+        )
+        updateTimeToBreak(nextIndex)
+      } else {
+        setTimeToBreak(0)
+      }
       setIsRunning(true)
       return nextIndex
     })
@@ -102,27 +64,88 @@ export default function Timer({
   function handleReset() {
     setIsRunning(false)
     setTimeRemaining((currentLevel?.duration || 0) * 60 * 1000)
+    updateTimeToBreak(currentLevelIndex)
   }
 
-  const currentLevel = levels[currentLevelIndex]
-  const nextLevel = levels[currentLevelIndex + 1]
+  function updateTimeToBreak(index: number) {
+    if (levels[index].break) {
+      setTimeToBreak(0)
+      return
+    }
+    let totalTime = 0
+    for (let i = index; i < levels.length; i++) {
+      if (levels[i].break) break
+      totalTime += levels[i].duration
+    }
+    totalTime = totalTime * 60 * 1000
+    setTimeToBreak(totalTime)
+  }
+
+  useEffect(() => {
+    readySound()
+    updateTimeToBreak(0)
+  }, [readySound])
+
+  useEffect(() => {
+    let timer: NodeJS.Timeout
+
+    if (timeRemaining == 62000 && nextLevel?.break) {
+      warningBreakSound()
+    }
+
+    if (timeRemaining == 300000) {
+      nextLevelSound()
+    }
+
+    if (isRunning) {
+      timer = setInterval(() => {
+        if (timeRemaining > 0) {
+          setTimeRemaining((prevTime) => {
+            if (prevTime <= 1000) {
+              clearInterval(timer)
+              handleNextLevel()
+              return 0
+            }
+            return prevTime - 1000
+          })
+          if (timeToBreak > 0) {
+            setTimeToBreak((prevTime) => {
+              if (prevTime <= 1000) {
+                clearInterval(timer)
+                return 0
+              }
+              return prevTime - 1000
+            })
+          }
+        }
+      }, 1000)
+    }
+
+    return () => clearInterval(timer)
+  }, [isRunning, timeRemaining, timeToBreak, currentLevelIndex])
 
   return (
     <div className="flex flex-grow flex-col items-center justify-center bg-zinc-900 px-4 text-white">
       <h2 className="mb-2 text-7xl font-bold">
         {currentLevel?.break ? 'Break' : `Level ${currentLevel?.id}`}
       </h2>
-      <p className="mb-8 text-xl">
+      <div className="mb-8 text-xl">
         {currentLevel?.bb &&
-          `Blinds: ${currentLevel?.sb} / ${currentLevel?.bb}`}
-      </p>
-      <p>Next Break: </p>
-
-      <FormatTime time={timeRemaining} />
+          currentLevel?.sb &&
+          `Blinds: ${formatNumber(currentLevel?.sb)} / ${formatNumber(currentLevel?.bb)}`}
+      </div>
+      {timeToBreak !== 0 && (
+        <div className="tabular-nums">
+          Next Break in: {formatTime(timeToBreak)}
+        </div>
+      )}
+      <div className='className="mb-8 leading-none" font-mono text-[20vmin] font-bold tabular-nums'>
+        {formatTime(timeRemaining)}
+      </div>
       <TimerProgressBar level={currentLevel} isRunning={isRunning} />
       <div className="mb-8 text-lg">
-        {nextLevel?.bb
-          ? `Next: ${nextLevel?.sb} / ${nextLevel?.bb}`
+        {nextLevel?.bb && nextLevel?.sb
+          ? `Next: ${formatNumber(nextLevel?.sb)} / ${formatNumber(nextLevel?.bb)}`
           : 'Next: Break'}
       </div>
       <div className="flex flex-row flex-wrap items-center justify-center gap-4">
