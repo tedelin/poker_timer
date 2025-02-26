@@ -3,7 +3,14 @@
 import formatNumber from '@/app/utils/formatNumber'
 import formatTime from '@/app/utils/formatTime'
 import generateVoice from '@/app/utils/generateVoice'
-import { Cog, Pause, Play, SkipForward, TimerReset } from 'lucide-react'
+import {
+  Cog,
+  Pause,
+  Play,
+  SkipBack,
+  SkipForward,
+  TimerReset,
+} from 'lucide-react'
 import { useEffect, useState } from 'react'
 import useSound from 'use-sound'
 import { LevelsArray } from '../app/types/levels'
@@ -39,16 +46,15 @@ export default function Timer({
     setIsRunning((prev) => !prev)
   }
 
-  function handleNextLevel() {
-    if (!nextLevel) return
+  function handleLevelChange(change: number) {
     setCurrentLevelIndex((prevIndex) => {
-      const nextIndex = prevIndex + 1
-      if (nextIndex >= levels.length) {
+      const nextIndex = prevIndex + change
+      if (nextIndex >= levels.length || nextIndex < 0) {
         setIsRunning(false)
         return prevIndex
       }
       setTimeRemaining(levels[nextIndex].duration * 60 * 1000)
-      if (!nextLevel.break) {
+      if (!levels[nextIndex].break) {
         generateVoice(
           `Your attention please, blinds are up! Blinds are now ${nextLevel.sb} ${nextLevel.bb}`,
           'pqHfZKP75CvOlQylNhV4'
@@ -104,7 +110,7 @@ export default function Timer({
           setTimeRemaining((prevTime) => {
             if (prevTime <= 1000) {
               clearInterval(timer)
-              handleNextLevel()
+              handleLevelChange(1)
               return 0
             }
             return prevTime - 1000
@@ -136,7 +142,7 @@ export default function Timer({
           `Blinds: ${formatNumber(currentLevel?.sb)} / ${formatNumber(currentLevel?.bb)}`}
       </div>
       {timeToBreak !== 0 && (
-        <div className="mb-8 text-sm tabular-nums text-gray-500">
+        <div className="mb-6 text-sm tabular-nums text-gray-500">
           Time to next break: {formatTime(timeToBreak)}
         </div>
       )}
@@ -146,12 +152,15 @@ export default function Timer({
         {formatTime(timeRemaining)}
       </div>
       <TimerProgressBar level={currentLevel} isRunning={isRunning} />
-      <div className="mb-8 text-lg">
+      <div className="mb-6 text-lg">
         {nextLevel?.bb && nextLevel?.sb
           ? `Next: ${formatNumber(nextLevel?.sb)} / ${formatNumber(nextLevel?.bb)}`
           : 'Next: Break'}
       </div>
       <div className="flex flex-row flex-wrap items-center justify-center gap-4">
+        <Button variant="ghost" onClick={() => handleLevelChange(-1)}>
+          <SkipBack />
+        </Button>
         <Button variant="ghost" onClick={handleStartPause}>
           {isRunning ? (
             <>
@@ -163,7 +172,7 @@ export default function Timer({
             </>
           )}
         </Button>
-        <Button variant="ghost" onClick={handleNextLevel}>
+        <Button variant="ghost" onClick={() => handleLevelChange(1)}>
           <SkipForward />
         </Button>
         <Button variant="ghost" onClick={handleReset}>
