@@ -35,6 +35,7 @@ export default function Timer({
   const [startSound] = useSound('/sounds/en/start.mp3')
   const [nextLevelSound] = useSound('/sounds/en/warning.mp3')
   const [warningBreakSound] = useSound('/sounds/en/warning_break.mp3')
+  const [beepSound] = useSound('/sounds/beep.mp3')
   const shouldBlink = timeRemaining <= 15000
   const currentLevel = levels[currentLevelIndex]
   const nextLevel = levels[currentLevelIndex + 1]
@@ -108,6 +109,7 @@ export default function Timer({
       timer = setInterval(() => {
         if (timeRemaining > 0) {
           setTimeRemaining((prevTime) => {
+            if (prevTime <= 15000) beepSound()
             if (prevTime <= 1000) {
               clearInterval(timer)
               handleLevelChange(1)
