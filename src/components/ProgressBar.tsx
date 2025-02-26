@@ -12,6 +12,7 @@ export default function TimerProgressBar({
 }: TimerProgressBarProps) {
   const durationSeconds = level?.duration * 60
   const [timePassed, setTimePassed] = useState(0)
+  const timeWarning = durationSeconds - timePassed <= 15
   const progress = (timePassed / durationSeconds) * 100
 
   useEffect(() => {
@@ -33,7 +34,7 @@ export default function TimerProgressBar({
   return (
     <div className="relative mb-4 h-8 w-full max-w-2xl overflow-hidden rounded bg-zinc-800">
       <div
-        className="h-full bg-green-300 transition-all duration-100 ease-linear"
+        className={`h-full transition-all duration-100 ease-linear ${timeWarning ? 'bg-red-400' : 'bg-green-300'}`}
         style={{ width: `${progress}%` }}
       />
     </div>
