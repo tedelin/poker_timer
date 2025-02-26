@@ -12,8 +12,6 @@ import { loadConfig, saveConfig } from '@/lib/levelConfig'
 function TimerSettings() {
   const [levels, setLevels] = useState<LevelsArray>([])
   const [isReady, setIsReady] = useState<boolean>(false)
-  const [defaultDuration, setDefaultDuration] = useState<number>(15)
-  const [defaultBB, setDefaultBB] = useState<number>(10)
 
   function handleAddBreak(duration: number) {
     setLevels((prevLevels) => [
@@ -26,10 +24,12 @@ function TimerSettings() {
     ])
   }
 
-  function handleAddLevel(duration: number) {
-    let bb = defaultBB
+  function handleAddLevel() {
+    let bb = 10
+    let duration = 20
     if (levels.length >= 1 && !levels[levels.length - 1].break) {
-      bb = levels[levels.length - 1].bb * 2
+      bb = levels[levels.length - 1]?.bb * 2
+      duration = levels[levels.length - 1].duration
     }
     setLevels((prevLevels) => [
       ...prevLevels,
@@ -63,7 +63,7 @@ function TimerSettings() {
         <Button
           variant="ghost"
           className="font-bold text-green-600 hover:bg-green-200"
-          onClick={() => handleAddLevel(defaultDuration)}
+          onClick={() => handleAddLevel(20)}
         >
           <Plus />
           Add Level
@@ -77,19 +77,6 @@ function TimerSettings() {
           Add Break
         </Button>
       </div>
-      {/* <div className="flex flex-row p-10">
-        <Input
-          type="number"
-          value={defaultBB}
-          onChange={(e) => setDefaultBB(Number(e.target.value))}
-        />
-        <Input
-          type="number"
-          value={defaultDuration}
-          onChange={(e) => setDefaultDuration(Number(e.target.value))}
-        />
-      </div> */}
-
       <div className="mb-2 flex items-center gap-4">
         <label className="inline-flex h-9 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0">
           <Upload />
