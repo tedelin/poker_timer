@@ -4,12 +4,13 @@ import { Button } from '@/components/ui/button'
 import { Coffee, Download, Plus, RotateCcw, Upload } from 'lucide-react'
 import { useState } from 'react'
 import Timer from '../components/timer'
-import { Level } from './types/levels'
+import { LevelsArray } from './types/levels'
 
 import LevelsTable from '@/components/LevelsTable'
+import { loadConfig, saveConfig } from '@/lib/levelConfig'
 
 function TimerSettings() {
-  const [levels, setLevels] = useState<Level[]>([])
+  const [levels, setLevels] = useState<LevelsArray>([])
   const [isReady, setIsReady] = useState<boolean>(false)
   const [defaultDuration, setDefaultDuration] = useState<number>(15)
   const [defaultBB, setDefaultBB] = useState<number>(10)
@@ -27,7 +28,7 @@ function TimerSettings() {
 
   function handleAddLevel(duration: number) {
     let bb = defaultBB
-    if (levels.length >= 1) {
+    if (levels.length >= 1 && !levels[levels.length - 1].break) {
       bb = levels[levels.length - 1].bb * 2
     }
     setLevels((prevLevels) => [
@@ -44,35 +45,6 @@ function TimerSettings() {
 
   function resetLevels() {
     setLevels([])
-  }
-
-  function loadConfig(event: React.ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0]
-    if (!file) return
-
-    const reader = new FileReader()
-    reader.onload = (e: ProgressEvent<FileReader>) => {
-      if (!e.target?.result) return
-
-      try {
-        const loadedLevels = JSON.parse(e.target.result as string)
-        setLevels(loadedLevels)
-      } catch (error) {
-        console.error('Error parsing JSON:', error)
-      }
-    }
-
-    reader.readAsText(file)
-  }
-
-  function saveConfig() {
-    const fileData = JSON.stringify(levels)
-    const blob = new Blob([fileData], { type: 'text/plain' })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.download = 'levels.json'
-    link.href = url
-    link.click()
   }
 
   if (isReady) {
@@ -126,14 +98,14 @@ function TimerSettings() {
             type="file"
             className="hidden"
             accept="application/json"
-            onChange={loadConfig}
+            onChange={(e) => loadConfig(e, setLevels)}
           />
         </label>
         <Button variant="ghost" onClick={resetLevels}>
           <RotateCcw />
           Reset
         </Button>
-        <Button variant="ghost" onClick={saveConfig}>
+        <Button variant="ghost" onClick={() => saveConfig(levels)}>
           <Download />
           Save
         </Button>
