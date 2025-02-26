@@ -63,7 +63,7 @@ function TimerSettings() {
         <Button
           variant="ghost"
           className="font-bold text-green-600 hover:bg-green-200"
-          onClick={() => handleAddLevel(20)}
+          onClick={() => handleAddLevel()}
         >
           <Plus />
           Add Level
