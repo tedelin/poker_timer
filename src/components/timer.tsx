@@ -28,6 +28,7 @@ export default function Timer({
   const [startSound] = useSound('/sounds/en/start.mp3')
   const [nextLevelSound] = useSound('/sounds/en/warning.mp3')
   const [warningBreakSound] = useSound('/sounds/en/warning_break.mp3')
+  const shouldBlink = timeRemaining <= 15000
   const currentLevel = levels[currentLevelIndex]
   const nextLevel = levels[currentLevelIndex + 1]
 
@@ -129,17 +130,19 @@ export default function Timer({
       <h2 className="mb-2 text-7xl font-bold">
         {currentLevel?.break ? 'Break' : `Level ${currentLevel?.id}`}
       </h2>
-      <div className="mb-8 text-xl">
+      <div className="mb-2 text-xl">
         {currentLevel?.bb &&
           currentLevel?.sb &&
           `Blinds: ${formatNumber(currentLevel?.sb)} / ${formatNumber(currentLevel?.bb)}`}
       </div>
       {timeToBreak !== 0 && (
-        <div className="tabular-nums">
-          Next Break in: {formatTime(timeToBreak)}
+        <div className="mb-8 text-sm tabular-nums text-gray-500">
+          Time to next break: {formatTime(timeToBreak)}
         </div>
       )}
-      <div className='className="mb-8 leading-none" font-mono text-[20vmin] font-bold tabular-nums'>
+      <div
+        className={`mb-4 leading-none ${shouldBlink ? 'animate-blink text-red-400' : ''} font-mono text-[20vmin] font-bold tabular-nums`}
+      >
         {formatTime(timeRemaining)}
       </div>
       <TimerProgressBar level={currentLevel} isRunning={isRunning} />
