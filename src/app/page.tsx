@@ -1,6 +1,7 @@
 'use client'
 
 import LevelsTable from '@/components/LevelsTable'
+import NavBar from '@/components/Navbar'
 import Timer from '@/components/timer'
 import { Button } from '@/components/ui/button'
 import { loadConfig, saveConfig } from '@/lib/levelConfig'
@@ -51,13 +52,13 @@ function TimerSettings() {
   }
 
   return (
-    <div className="flex max-h-full grow flex-col items-center gap-4 bg-zinc-900 text-white">
-      {/* <div className="mt-3 text-xl font-bold">42Poker - Tournament Timer</div> */}
+    <div className="flex grow flex-col items-center bg-zinc-900 text-white">
+      <NavBar />
       <div className="scrollbar-none h-dvh max-h-dvh overflow-y-auto rounded-md">
         <LevelsTable levels={levels} setLevels={setLevels} />
       </div>
 
-      <div className="flex items-center gap-4">
+      <div className="mb-2 flex gap-4">
         <Button
           variant="ghost"
           className="font-bold text-green-600 hover:bg-green-200"
@@ -75,7 +76,7 @@ function TimerSettings() {
           Add Break
         </Button>
       </div>
-      <div className="mb-2 flex items-center gap-4">
+      <div className="mb-4 flex gap-4">
         <label className="inline-flex h-9 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0">
           <Upload />
           Load
