@@ -16,7 +16,11 @@ function FullScreenBtn() {
   }
 
   return (
-    <Button variant="ghost" onClick={toggleFullscreen}>
+    <Button
+      className="hidden sm:block"
+      variant="ghost"
+      onClick={toggleFullscreen}
+    >
       {isFullscreen ? (
         <>
           <Minimize />
