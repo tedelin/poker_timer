@@ -36,6 +36,8 @@ export default function Timer({
   const [nextLevelSound] = useSound('/sounds/en/warning.mp3')
   const [warningBreakSound] = useSound('/sounds/en/warning_break.mp3')
   const [beepSound] = useSound('/sounds/beep.mp3')
+  const [breakSound] = useSound('/sounds/en/break.mp3')
+  const [breakOverSound] = useSound('/sounds/en/break_over.mp3')
   const shouldBlink = timeRemaining <= 15000
   const currentLevel = levels[currentLevelIndex]
   const nextLevel = levels[currentLevelIndex + 1]
@@ -55,13 +57,15 @@ export default function Timer({
         return prevIndex
       }
       setTimeRemaining(levels[nextIndex].duration * 60 * 1000)
-      if (!levels[nextIndex].break) {
+      if (levels[prevIndex].break) breakOverSound()
+      else if (!levels[nextIndex].break) {
         generateVoice(
           `Your attention please, blinds are up! Blinds are now ${nextLevel.sb} ${nextLevel.bb}`,
           'pqHfZKP75CvOlQylNhV4'
         )
         updateTimeToBreak(nextIndex)
       } else {
+        breakSound()
         setTimeToBreak(0)
       }
       setIsRunning(true)
