@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button'
 import { LevelsArray } from '@/types/levels'
 import formatNumber from '@/utils/formatNumber'
 import formatTime from '@/utils/formatTime'
+import generateVoice from '@/utils/generateVoice'
 import {
   Cog,
   Pause,
@@ -55,10 +56,10 @@ export default function Timer({
       }
       setTimeRemaining(levels[nextIndex].duration * 60 * 1000)
       if (!levels[nextIndex].break) {
-        // generateVoice(
-        //   `Your attention please, blinds are up! Blinds are now ${nextLevel.sb} ${nextLevel.bb}`,
-        //   'pqHfZKP75CvOlQylNhV4'
-        // )
+        generateVoice(
+          `Your attention please, blinds are up! Blinds are now ${nextLevel.sb} ${nextLevel.bb}`,
+          'pqHfZKP75CvOlQylNhV4'
+        )
         updateTimeToBreak(nextIndex)
       } else {
         setTimeToBreak(0)
