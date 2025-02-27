@@ -66,11 +66,10 @@ export default function LevelsTable({
         <table className="w-full table-auto border-separate border-spacing-4">
           <thead className="sticky top-0 bg-zinc-900 shadow-md">
             <tr>
-              <th className="text-center">Round</th>
-              <th>Duration (min)</th>
-              <th>Small Blind</th>
-              <th>Big Blind</th>
-              <th></th>
+              <th className="text-left">Round</th>
+              <th className="text-left">Duration (min)</th>
+              <th className="text-left">Small Blind</th>
+              <th className="text-left">Big Blind</th>
               <th></th>
             </tr>
           </thead>

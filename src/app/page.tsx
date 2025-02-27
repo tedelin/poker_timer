@@ -1,6 +1,5 @@
 'use client'
 
-import QRCodeSVG from '@/assets/qrcode.svg'
 import LevelsTable from '@/components/LevelsTable'
 import Timer from '@/components/timer'
 import { Button } from '@/components/ui/button'
@@ -54,7 +53,6 @@ function TimerSettings() {
   return (
     <div className="flex max-h-full grow flex-col items-center gap-4 bg-zinc-900 text-white">
       {/* <div className="mt-3 text-xl font-bold">42Poker - Tournament Timer</div> */}
-      <QRCodeSVG />
       <div className="scrollbar-none h-dvh max-h-dvh overflow-y-auto rounded-md">
         <LevelsTable levels={levels} setLevels={setLevels} />
       </div>

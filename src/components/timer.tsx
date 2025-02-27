@@ -155,7 +155,7 @@ export default function Timer({
       <TimerProgressBar level={currentLevel} isRunning={isRunning} />
       <div className="mb-6 text-lg">
         {nextLevel?.bb && nextLevel?.sb
-          ? `Next: ${formatNumber(nextLevel?.sb)} / ${formatNumber(nextLevel?.bb)}`
+          ? `Next Blinds: ${formatNumber(nextLevel?.sb)} / ${formatNumber(nextLevel?.bb)}`
           : 'Next: Break'}
       </div>
       <div className="flex flex-row flex-wrap items-center justify-center gap-4">

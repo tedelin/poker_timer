@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Level } from '@/types/levels'
-import { Minus } from 'lucide-react'
+import { Trash2 } from 'lucide-react'
 
 export default function LevelRow({
   level,
@@ -13,6 +13,10 @@ export default function LevelRow({
   onDelete: () => void
 }) {
   function handleInputChange(key: keyof Level, value: number) {
+    value = value | 0
+    if (value <= 0) value = 1
+    else if (value > 1440 && key == 'duration') value = 1440
+    else if (value > 100000000) value = 100000000
     onUpdate({ ...level, [key]: value })
   }
 
@@ -56,7 +60,7 @@ export default function LevelRow({
           variant="ghost"
           className="w-10 hover:bg-red-200"
         >
-          <Minus className="text-center text-red-500" />
+          <Trash2 className="text-center text-red-500" />
         </Button>
       </td>
     </>

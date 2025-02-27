@@ -1,7 +1,11 @@
 export function formatTime(ms: number): string {
-  const minutes = Math.floor(ms / 60000)
-  const seconds = ((ms % 60000) / 1000).toFixed(0)
-  return `${minutes}:${seconds.padStart(2, '0')}`
+  const hours = Math.floor(ms / 3600000)
+  const minutes = Math.floor((ms % 3600000) / 60000)
+  const seconds = Math.floor((ms % 60000) / 1000)
+
+  const time = `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`
+
+  return hours > 0 ? `${hours}:${time}` : time
 }
 
 export default formatTime
