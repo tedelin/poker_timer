@@ -1,5 +1,5 @@
-import { Level, LevelsArray } from '@/app/types/levels'
 import SortableItem from '@/components/SortableItem'
+import { Level, LevelsArray } from '@/types/levels'
 import {
   DndContext,
   DragEndEvent,

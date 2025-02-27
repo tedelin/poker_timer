@@ -1,4 +1,4 @@
-import { Level } from '@/app/types/levels'
+import { Level } from '@/types/levels'
 import { useEffect, useState } from 'react'
 
 interface TimerProgressBarProps {

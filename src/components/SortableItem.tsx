@@ -1,7 +1,7 @@
+import LevelRow from '@/components/LevelRow'
+import { Level } from '@/types/levels'
 import { useSortable } from '@dnd-kit/sortable'
 import { CSS } from '@dnd-kit/utilities'
-import LevelRow from './LevelRow'
-import { Level } from '@/app/types/levels'
 
 export default function SortableItem({
   level,

@@ -1,4 +1,4 @@
-import { LevelsArray } from '@/app/types/levels'
+import { LevelsArray } from '@/types/levels'
 
 export function loadConfig(
   event: React.ChangeEvent<HTMLInputElement>,

@@ -1,8 +1,11 @@
 'use client'
 
-import formatNumber from '@/app/utils/formatNumber'
-import formatTime from '@/app/utils/formatTime'
-import generateVoice from '@/app/utils/generateVoice'
+import FullScreenBtn from '@/components/FullscreenBtn'
+import TimerProgressBar from '@/components/ProgressBar'
+import { Button } from '@/components/ui/button'
+import { LevelsArray } from '@/types/levels'
+import formatNumber from '@/utils/formatNumber'
+import formatTime from '@/utils/formatTime'
 import {
   Cog,
   Pause,
@@ -13,10 +16,6 @@ import {
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import useSound from 'use-sound'
-import { LevelsArray } from '../app/types/levels'
-import FullScreenBtn from './FullscreenBtn'
-import TimerProgressBar from './ProgressBar'
-import { Button } from './ui/button'
 
 export default function Timer({
   levels,
@@ -56,10 +55,10 @@ export default function Timer({
       }
       setTimeRemaining(levels[nextIndex].duration * 60 * 1000)
       if (!levels[nextIndex].break) {
-        generateVoice(
-          `Your attention please, blinds are up! Blinds are now ${nextLevel.sb} ${nextLevel.bb}`,
-          'pqHfZKP75CvOlQylNhV4'
-        )
+        // generateVoice(
+        //   `Your attention please, blinds are up! Blinds are now ${nextLevel.sb} ${nextLevel.bb}`,
+        //   'pqHfZKP75CvOlQylNhV4'
+        // )
         updateTimeToBreak(nextIndex)
       } else {
         setTimeToBreak(0)

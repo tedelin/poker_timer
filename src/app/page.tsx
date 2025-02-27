@@ -1,13 +1,13 @@
 'use client'
 
+import QRCodeSVG from '@/assets/qrcode.svg'
+import LevelsTable from '@/components/LevelsTable'
+import Timer from '@/components/timer'
 import { Button } from '@/components/ui/button'
+import { loadConfig, saveConfig } from '@/lib/levelConfig'
+import { LevelsArray } from '@/types/levels'
 import { Coffee, Download, Plus, RotateCcw, Upload } from 'lucide-react'
 import { useState } from 'react'
-import Timer from '../components/timer'
-import { LevelsArray } from './types/levels'
-
-import LevelsTable from '@/components/LevelsTable'
-import { loadConfig, saveConfig } from '@/lib/levelConfig'
 
 function TimerSettings() {
   const [levels, setLevels] = useState<LevelsArray>([])
@@ -53,8 +53,8 @@ function TimerSettings() {
 
   return (
     <div className="flex max-h-full grow flex-col items-center gap-4 bg-zinc-900 text-white">
-      <div className="mt-3 text-xl font-bold">42Poker - Tournament Timer</div>
-
+      {/* <div className="mt-3 text-xl font-bold">42Poker - Tournament Timer</div> */}
+      <QRCodeSVG />
       <div className="scrollbar-none h-dvh max-h-dvh overflow-y-auto rounded-md">
         <LevelsTable levels={levels} setLevels={setLevels} />
       </div>
