@@ -25,12 +25,8 @@ function TimerSettings() {
   }
 
   function handleAddLevel() {
-    let bb = 10
-    let duration = 20
-    if (levels.length >= 1 && !levels[levels.length - 1].break) {
-      bb = levels[levels.length - 1]?.bb * 2
-      duration = levels[levels.length - 1].duration
-    }
+    const bb = (levels[levels.length - 1]?.bb ?? 5) * 2
+    const duration = levels[levels.length - 1]?.duration ?? 20
     setLevels((prevLevels) => [
       ...prevLevels,
       {
