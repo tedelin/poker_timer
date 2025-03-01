@@ -1,0 +1,10 @@
+services:
+  42poker-development:
+    build:
+      context: ../../
+      dockerfile: docker/development/Dockerfile
+    image: 42poker-development
+    volumes:
+      - ../../:/app
+    ports:
+      - "3001:3000"
