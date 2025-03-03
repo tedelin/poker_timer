@@ -145,10 +145,10 @@ export default function Timer({
       <div className="mb-2 text-3xl">
         {currentLevel?.bb &&
           currentLevel?.sb &&
-          `${formatNumber(currentLevel?.sb)} / ${formatNumber(currentLevel?.bb)}`}
+          `Blinds: ${formatNumber(currentLevel?.sb)} / ${formatNumber(currentLevel?.bb)}`}
       </div>
       {timeToBreak !== 0 && (
-        <div className="mb-6 text-base tabular-nums text-gray-500">
+        <div className="mb-6 text-lg tabular-nums text-gray-500">
           Time to next break: {formatTime(timeToBreak)}
         </div>
       )}
