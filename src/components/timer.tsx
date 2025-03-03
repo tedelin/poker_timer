@@ -153,7 +153,7 @@ export default function Timer({
         </div>
       )}
       <div
-        className={`mb-4 leading-none ${shouldBlink ? 'animate-blink text-red-400' : ''} font-mono text-[20vmin] font-bold tabular-nums`}
+        className={`mb-4 leading-none ${shouldBlink ? 'animate-blink text-red-400' : ''} font-mono text-[20vmin] font-bold tabular-nums xl:text-[12rem]`}
       >
         {formatTime(timeRemaining)}
       </div>
