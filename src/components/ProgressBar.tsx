@@ -32,7 +32,7 @@ export default function TimerProgressBar({
   }, [level])
 
   return (
-    <div className="relative mb-4 h-8 w-full max-w-2xl overflow-hidden rounded bg-zinc-800">
+    <div className="relative mb-4 h-8 w-full max-w-5xl overflow-hidden rounded-lg bg-zinc-800">
       <div
         className={`h-full transition-all duration-100 ease-linear ${timeWarning ? 'bg-red-400' : 'bg-green-300'}`}
         style={{ width: `${progress}%` }}
