@@ -1,5 +1,6 @@
 services:
   42poker-production:
+    container_name: 42poker-prod
     build:
       context: ../../
       dockerfile: docker/production/Dockerfile

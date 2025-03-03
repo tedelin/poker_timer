@@ -1,5 +1,6 @@
 services:
   42poker-development:
+    container_name: 42poker-dev
     build:
       context: ../../
       dockerfile: docker/development/Dockerfile
