@@ -139,21 +139,21 @@ export default function Timer({
 
   return (
     <div className="flex flex-grow flex-col items-center justify-center bg-zinc-900 px-4 text-white">
-      <h2 className="mb-2 text-7xl font-bold">
+      <h2 className="mb-2 text-4xl font-bold">
         {currentLevel?.break ? 'Break' : `Level ${currentLevel?.id}`}
       </h2>
-      <div className="mb-2 text-xl">
+      <div className="mb-2 text-2xl">
         {currentLevel?.bb &&
           currentLevel?.sb &&
           `Blinds: ${formatNumber(currentLevel?.sb)} / ${formatNumber(currentLevel?.bb)}`}
       </div>
       {timeToBreak !== 0 && (
-        <div className="mb-6 text-sm tabular-nums text-gray-500">
+        <div className="mb-6 text-base tabular-nums text-gray-500">
           Time to next break: {formatTime(timeToBreak)}
         </div>
       )}
       <div
-        className={`mb-4 leading-none ${shouldBlink ? 'animate-blink text-red-400' : ''} font-mono text-[20vmin] font-bold tabular-nums`}
+        className={`mb-4 leading-none ${shouldBlink ? 'animate-blink text-red-400' : ''} font-mono text-[15vmin] font-bold tabular-nums`}
       >
         {formatTime(timeRemaining)}
       </div>
