@@ -35,10 +35,10 @@ export default function Timer({
   const [startSound] = useSound('/sounds/en/start.mp3')
   const [nextLevelSound] = useSound('/sounds/en/warning.mp3')
   const [warningBreakSound] = useSound('/sounds/en/warning_break.mp3')
-  const [beepSound] = useSound('/sounds/beep.mp3')
+  const [beepSound] = useSound('/sounds/beep.mp3', { volume: 0.5 })
   const [breakSound] = useSound('/sounds/en/break.mp3')
   const [breakOverSound] = useSound('/sounds/en/break_over.mp3')
-  const shouldBlink = timeRemaining <= 15000
+  const shouldBlink = timeRemaining <= 5000
   const currentLevel = levels[currentLevelIndex]
   const nextLevel = levels[currentLevelIndex + 1]
 
@@ -52,23 +52,15 @@ export default function Timer({
   function handleLevelChange(change: number) {
     setCurrentLevelIndex((prevIndex) => {
       const nextIndex = prevIndex + change
+
       if (nextIndex >= levels.length || nextIndex < 0) {
         setIsRunning(false)
         return prevIndex
       }
+
       setTimeRemaining(levels[nextIndex].duration * 60 * 1000)
-      if (levels[prevIndex].break) breakOverSound()
-      else if (!levels[nextIndex].break) {
-        generateVoice(
-          `Your attention please, blinds are up! Blinds are now ${nextLevel.sb} ${nextLevel.bb}`,
-          'pqHfZKP75CvOlQylNhV4'
-        )
-        updateTimeToBreak(nextIndex)
-      } else {
-        breakSound()
-        setTimeToBreak(0)
-      }
       setIsRunning(true)
+
       return nextIndex
     })
   }
@@ -113,7 +105,7 @@ export default function Timer({
       timer = setInterval(() => {
         if (timeRemaining > 0) {
           setTimeRemaining((prevTime) => {
-            if (prevTime <= 15000) beepSound()
+            if (prevTime <= 5000) beepSound()
             if (prevTime <= 1000) {
               clearInterval(timer)
               handleLevelChange(1)
@@ -137,6 +129,23 @@ export default function Timer({
     return () => clearInterval(timer)
   }, [isRunning, timeRemaining, timeToBreak, currentLevelIndex])
 
+  useEffect(() => {
+    if (currentLevelIndex < 0 || currentLevelIndex >= levels.length) return
+
+    const currentLevel = levels[currentLevelIndex]
+
+    if (currentLevel.break) {
+      breakSound()
+      setTimeToBreak(0)
+    } else {
+      generateVoice(
+        `Your attention please, blinds are up! Blinds are now ${currentLevel.sb} ${currentLevel.bb}`,
+        'pqHfZKP75CvOlQylNhV4'
+      )
+      updateTimeToBreak(currentLevelIndex)
+    }
+  }, [currentLevelIndex])
+
   return (
     <div className="flex flex-grow flex-col items-center justify-center bg-zinc-900 px-4 text-white">
       <h2 className="mb-2 text-5xl font-bold">
@@ -148,10 +157,11 @@ export default function Timer({
           `Blinds: ${formatNumber(currentLevel?.sb)} / ${formatNumber(currentLevel?.bb)}`}
       </div>
       {timeToBreak !== 0 && (
-        <div className="mb-6 text-lg tabular-nums text-gray-500">
+        <div className="mb-2 text-lg tabular-nums text-gray-500">
           Time to next break: {formatTime(timeToBreak)}
         </div>
       )}
+      {/* <PlayersCount /> */}
       <div
         className={`mb-4 leading-none ${shouldBlink ? 'animate-blink text-red-400' : ''} font-mono text-[20vmin] font-bold tabular-nums xl:text-[12rem]`}
       >
