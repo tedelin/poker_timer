@@ -12,7 +12,7 @@ export default function TimerProgressBar({
 }: TimerProgressBarProps) {
   const durationSeconds = level?.duration * 60
   const [timePassed, setTimePassed] = useState(0)
-  const timeWarning = durationSeconds - timePassed <= 15
+  const timeWarning = durationSeconds - timePassed <= 5
   const progress = (timePassed / durationSeconds) * 100
 
   useEffect(() => {
