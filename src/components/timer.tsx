@@ -130,7 +130,7 @@ export default function Timer({
   }, [isRunning, timeRemaining, timeToBreak, currentLevelIndex])
 
   useEffect(() => {
-    if (currentLevelIndex < 0 || currentLevelIndex >= levels.length) return
+    if (currentLevelIndex <= 0 || currentLevelIndex >= levels.length) return
 
     const currentLevel = levels[currentLevelIndex]
 
@@ -151,24 +151,24 @@ export default function Timer({
       <h2 className="mb-2 text-5xl font-bold">
         {currentLevel?.break ? 'Break' : `Level ${currentLevel?.id}`}
       </h2>
-      <div className="mb-2 text-3xl">
+      <div className="mb-2 text-4xl">
         {currentLevel?.bb &&
           currentLevel?.sb &&
           `Blinds: ${formatNumber(currentLevel?.sb)} / ${formatNumber(currentLevel?.bb)}`}
       </div>
       {timeToBreak !== 0 && (
-        <div className="mb-2 text-lg tabular-nums text-gray-500">
+        <div className="mb-6 text-2xl tabular-nums text-gray-500">
           Time to next break: {formatTime(timeToBreak)}
         </div>
       )}
       {/* <PlayersCount /> */}
       <div
-        className={`mb-4 leading-none ${shouldBlink ? 'animate-blink text-red-400' : ''} font-mono text-[20vmin] font-bold tabular-nums xl:text-[12rem]`}
+        className={`mb-6 leading-none ${shouldBlink ? 'animate-blink text-red-400' : ''} font-mono text-[20vmin] font-bold tabular-nums xl:text-[12rem]`}
       >
         {formatTime(timeRemaining)}
       </div>
       <TimerProgressBar level={currentLevel} isRunning={isRunning} />
-      <div className="mb-6 text-lg">
+      <div className="mb-6 mt-2 text-xl">
         {nextLevel?.bb && nextLevel?.sb
           ? `Next Blinds: ${formatNumber(nextLevel?.sb)} / ${formatNumber(nextLevel?.bb)}`
           : 'Next: Break'}
