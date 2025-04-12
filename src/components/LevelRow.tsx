@@ -13,7 +13,7 @@ export default function LevelRow({
   onDelete: () => void
 }) {
   function handleInputChange(key: keyof Level, value: number) {
-    value = value | 0
+    // value = value | 0
     if (value <= 0) value = 1
     else if (value > 1440 && key == 'duration') value = 1440
     else if (value > 100000000) value = 100000000

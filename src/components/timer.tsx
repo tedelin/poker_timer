@@ -35,7 +35,7 @@ export default function Timer({
   const [startSound] = useSound('/sounds/en/start.mp3')
   const [nextLevelSound] = useSound('/sounds/en/warning.mp3')
   const [warningBreakSound] = useSound('/sounds/en/warning_break.mp3')
-  const [beepSound] = useSound('/sounds/beep.mp3', { volume: 0.5 })
+  const [beepSound] = useSound('/sounds/beep.mp3', { volume: 0.2 })
   const [breakSound] = useSound('/sounds/en/break.mp3')
   const [breakOverSound] = useSound('/sounds/en/break_over.mp3')
   const shouldBlink = timeRemaining <= 5000
@@ -147,7 +147,7 @@ export default function Timer({
   }, [currentLevelIndex])
 
   return (
-    <div className="flex flex-grow flex-col items-center justify-center bg-zinc-900 px-4 text-white">
+    <div className="flex min-h-screen flex-grow flex-col items-center justify-center bg-zinc-900 px-4 text-white">
       <h2 className="mb-2 text-5xl font-bold">
         {currentLevel?.break ? 'Break' : `Level ${currentLevel?.id}`}
       </h2>

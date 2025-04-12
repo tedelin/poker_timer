@@ -64,7 +64,7 @@ export default function LevelsTable({
         onDragEnd={handleDragEnd}
       >
         <table className="w-full table-auto border-separate border-spacing-4">
-          <thead className="sticky top-0 bg-zinc-900 shadow-md">
+          <thead className="sticky top-0 bg-background shadow-md">
             <tr>
               <th className="text-left">Round</th>
               <th className="text-left">Duration (min)</th>
