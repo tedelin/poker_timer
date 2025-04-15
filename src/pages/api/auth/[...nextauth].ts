@@ -35,7 +35,7 @@ export default NextAuth({
 // Function to refresh OAuth access token
 async function refreshAccessToken(token) {
   try {
-    const response = await fetch('https://oauth2.googleapis.com/token', {
+    const response = await fetch('https://api.intra.42.fr/oauth/token', {
       method: 'POST',
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
       body: new URLSearchParams({
