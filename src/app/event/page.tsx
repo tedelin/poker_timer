@@ -3,6 +3,7 @@ import Navbar from '@/components/navbar'
 import { Button } from '@/components/ui/button'
 import { UserManager } from '@/components/user-manager'
 import { signIn, useSession } from 'next-auth/react'
+import { useEffect } from 'react'
 
 function Event() {
   return (
@@ -23,6 +24,12 @@ function Event() {
 
 export default function EventPage() {
   const { data: session } = useSession()
+
+  useEffect(() => {
+    if (session?.error === 'RefreshAccessTokenError') {
+      signIn() // Force sign in to hopefully resolve error
+    }
+  }, [session])
 
   if (session) return <Event />
 
