@@ -30,23 +30,26 @@ export function UserManager() {
   const { data: session } = useSession()
 
   const fetchUsers = async () => {
+    let page = 1
+    let page_size = 100
     setLoading(true)
     try {
-      const url = `https://api.intra.42.fr/v2/events/${eventId}/events_users?size=100`
       const headers = {
         Authorization: `Bearer ${session.accessToken}`,
       }
+      const params = new URLSearchParams()
+      params.append('page[number]', page.toString())
+      params.append('page[size]', page_size.toString())
+      const url = `https://api.intra.42.fr/v2/events/${eventId}/events_users?${params}`
       const response = await fetch(url, { headers })
       const data = await response.json()
-
-      console.log(data)
       const formattedUsers = data.map((user: any) => ({
         id: user.id,
         name: `${user.user.first_name} ${user.user.last_name}`,
         firstName: user.user.usual_first_name ?? user.user.first_name,
         login: user.user.login,
         lastName: user.user.last_name,
-        avatar: user.user.image.versions.small,
+        avatar: user.user.image.link,
         isPresent: false,
         tableId: null,
         isRolling: false,
