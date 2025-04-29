@@ -43,7 +43,8 @@ export function UserManager() {
       const formattedUsers = data.map((user: any) => ({
         id: user.id,
         name: `${user.user.first_name} ${user.user.last_name}`,
-        firstName: user.user.first_name,
+        firstName: user.user.usual_first_name ?? user.user.first_name,
+        login: user.user.login,
         lastName: user.user.last_name,
         avatar: user.user.image.versions.small,
         isPresent: false,

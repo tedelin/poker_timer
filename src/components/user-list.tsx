@@ -71,7 +71,7 @@ export function UserList({ users, toggleUserPresence }: UserListProps) {
             </Avatar>
             <div className="min-w-0 flex-1">
               <div className="truncate text-sm font-medium">
-                {user.firstName} {user.lastName}
+                {user.firstName} ({user.login})
                 {user.tableId && (
                   <Badge variant="outline" className="ml-2">
                     Table {user.tableId}

@@ -3,6 +3,7 @@ export interface User {
   name: string
   firstName?: string
   lastName?: string
+  login?: string
   avatar: string
   isPresent: boolean
   tableId: number | null
