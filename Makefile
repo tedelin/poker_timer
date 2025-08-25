@@ -1,6 +1,9 @@
 DEV=docker/development/compose.yaml
 PROD=docker/production/compose.yaml
 
+start:
+	./start.sh
+
 dev:
 	docker compose -f $(DEV) up -d --build
 
