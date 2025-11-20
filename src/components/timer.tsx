@@ -8,6 +8,7 @@ import formatNumber from '@/utils/formatNumber'
 import formatTime from '@/utils/formatTime'
 import generateVoice from '@/utils/generateVoice'
 import {
+  Coffee,
   Cog,
   Pause,
   Play,
@@ -17,6 +18,7 @@ import {
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import useSound from 'use-sound'
+import { Input } from './ui/input'
 
 export default function Timer({
   levels,
@@ -41,6 +43,7 @@ export default function Timer({
   const shouldBlink = timeRemaining <= 5000
   const currentLevel = levels[currentLevelIndex]
   const nextLevel = levels[currentLevelIndex + 1]
+  const [newBreak, setNewBreak] = useState(0)
 
   function handleStartPause() {
     if (currentLevelIndex == 0 && !isRunning) {
@@ -83,6 +86,22 @@ export default function Timer({
     }
     totalTime = totalTime * 60 * 1000
     setTimeToBreak(totalTime)
+  }
+
+  function addBreak() {
+    levels.splice(currentLevelIndex + 1, 0, {
+      id: levels.length + 1,
+      duration: newBreak,
+      break: true,
+    })
+    updateTimeToBreak(currentLevelIndex)
+  }
+
+  function handleInputBreak(value: number) {
+    if (value <= 0) value = 1
+    else if (value > 1440) value = 1440
+    else if (value > 100000000) value = 100000000
+    setNewBreak(value)
   }
 
   useEffect(() => {
@@ -196,6 +215,15 @@ export default function Timer({
         </Button>
         <Button onClick={() => setIsReady(false)} variant="ghost">
           <Cog />
+        </Button>
+        <Input
+          className="w-[50px]"
+          value={newBreak}
+          onChange={(e) => handleInputBreak(Number(e.target.value))}
+        />
+        <Button onClick={() => addBreak()}>
+          Add Break
+          <Coffee />
         </Button>
         <FullScreenBtn />
       </div>
