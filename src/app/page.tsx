@@ -1,8 +1,8 @@
 'use client'
 
 import LevelsTable from '@/components/LevelsTable'
-import Navbar from '@/components/navbar'
-import Timer from '@/components/timer'
+import Navbar from '@/components/Navbar'
+import Timer from '@/components/Timer'
 import { Button } from '@/components/ui/button'
 import { loadConfig, saveConfig } from '@/lib/levelConfig'
 import { LevelsArray } from '@/types/levels'
@@ -57,7 +57,6 @@ function TimerSettings() {
 
       <div className="absolute bottom-10 left-0 w-full bg-background p-4">
         <div className="container mx-auto flex flex-col items-center gap-4">
-          {/* Add Level & Add Break */}
           <div className="flex gap-4">
             <Button
               variant="ghost"
@@ -76,8 +75,6 @@ function TimerSettings() {
               Add Break
             </Button>
           </div>
-
-          {/* Load, Reset, Save */}
           <div className="flex gap-4">
             <label className="inline-flex h-9 cursor-pointer items-center justify-center gap-2 whitespace-nowrap rounded-md px-4 py-2 text-sm font-medium transition-colors hover:bg-accent hover:text-accent-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0">
               <Upload />
@@ -98,8 +95,6 @@ function TimerSettings() {
               Save
             </Button>
           </div>
-
-          {/* Start Button */}
           <Button
             className="w-96 bg-green-600 font-bold text-foreground hover:bg-green-700"
             onClick={() => setIsReady(true)}

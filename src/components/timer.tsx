@@ -39,7 +39,6 @@ export default function Timer({
   const [warningBreakSound] = useSound('/sounds/en/warning_break.mp3')
   const [beepSound] = useSound('/sounds/beep.mp3', { volume: 0.2 })
   const [breakSound] = useSound('/sounds/en/break.mp3')
-  const [breakOverSound] = useSound('/sounds/en/break_over.mp3')
   const shouldBlink = timeRemaining <= 5000
   const currentLevel = levels[currentLevelIndex]
   const nextLevel = levels[currentLevelIndex + 1]
@@ -180,7 +179,6 @@ export default function Timer({
           Time to next break: {formatTime(timeToBreak)}
         </div>
       )}
-      {/* <PlayersCount /> */}
       <div
         className={`mb-6 leading-none ${shouldBlink ? 'animate-blink text-red-400' : ''} font-mono text-[20vmin] font-bold tabular-nums xl:text-[12rem]`}
       >

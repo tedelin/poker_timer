@@ -1,6 +1,6 @@
 'use client'
 
-import { DiceAnimation } from '@/components/dice-animation'
+import { DiceAnimation } from '@/components/DiceAnimation'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'

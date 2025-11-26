@@ -1,6 +1,6 @@
 'use client'
 
-import { DiceAnimation } from '@/components/dice-animation'
+import { DiceAnimation } from '@/components/DiceAnimation'
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import { Badge } from '@/components/ui/badge'
 import { Checkbox } from '@/components/ui/checkbox'

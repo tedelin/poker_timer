@@ -1,7 +1,7 @@
 'use client'
 import Navbar from '@/components/navbar'
 import { Button } from '@/components/ui/button'
-import { UserManager } from '@/components/user-manager'
+import { UserManager } from '@/components/UserManager'
 import { signIn, useSession } from 'next-auth/react'
 import { useEffect } from 'react'
 

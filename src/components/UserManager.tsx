@@ -1,7 +1,7 @@
 'use client'
 
-import { LateRegistration } from '@/components/late-registration'
-import { TableAssignment } from '@/components/table-assignment'
+import { LateRegistration } from '@/components/LateRegistration'
+import { TableAssignment } from '@/components/TableAssignment'
 import { Button } from '@/components/ui/button'
 import {
   Card,
@@ -14,7 +14,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import { UserList } from '@/components/user-list'
+import { UserList } from '@/components/UserList'
 import { Table, User } from '@/types/types'
 import { useSession } from 'next-auth/react'
 import { useState } from 'react'
